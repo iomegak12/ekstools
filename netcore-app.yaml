@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: customerrestservices
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: customerrestservices
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: customerrestservices
+        image: iomega/professionalnetcoreserviceslinux
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://*:8080"
+        - name: CRMSystemDBConnectionString
+          value: "ZGF0YSBzb3VyY2U9YTM5MjI1ZDYwNGJjOTExZTliMWUzMGExOGI4ODBkYzktMTQyMzE0NjkwMC5hcC1zb3V0aC0xLmVsYi5hbWF6b25hd3MuY29tO3VzZXIgaWQ9c2E7cGFzc3dvcmQ9UHJlc3RpZ2UxMjM7aW5pdGlhbCBjYXRhbG9nPUNSTVN5c3RlbURCOw=="
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customerrestservices
+spec:
+  selector:
+    app: customerrestservices
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer

@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ngclientweb
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ngclientweb
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: ngclientweb
+        image: iomega/ngclient-dist-linux-v2
+        ports:
+        - containerPort: 7070
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ngclientweb
+spec:
+  selector:
+    app: ngclientweb
+  ports:
+    - protocol: TCP
+      port: 7070
+      targetPort: 7070
+  type: LoadBalancer

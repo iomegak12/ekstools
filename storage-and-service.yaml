@@ -1,0 +1,23 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+     name: sql-disk
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+mountOptions:
+  - debug
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-datav1
+  annotations:
+    volume.beta.kubernetes.io/storage-class: sql-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
